@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: billing-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: billing-service
+      auto-offset-reset: earliest
+
+server:
+  port: 8080
+
+app:
+  order-topic: order-events
+  dynamodb-endpoint: http://localhost:8000
+  commission-percent: 20
