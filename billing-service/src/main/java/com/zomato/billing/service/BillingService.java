@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.zomato.billing.calculator.BreakupCalculator;
 import com.zomato.billing.model.LedgerEntry;
 import com.zomato.billing.model.OrderEvent;
+import com.zomato.billing.model.OrderStatusEnum;
 import com.zomato.billing.repository.LedgerRepository;
 
 @Service
@@ -24,7 +25,11 @@ public class BillingService {
 		this.repository = repository;
 	}
 
+	// Used by both the Kafka consumer and POST /bill. Only delivered orders are billed.
 	public void bill(OrderEvent order) {
+		if (!OrderStatusEnum.DELIVERED.equals(order.status())) {
+			return;
+		}
 		List<LedgerEntry> entries = calculator.calculate(order);
 		boolean saved = repository.saveIfNew(entries);
 		log.info("Order {}: {}", order.orderId(), saved ? "billed" : "already billed, skipped");

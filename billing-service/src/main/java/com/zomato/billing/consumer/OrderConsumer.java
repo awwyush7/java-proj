@@ -22,8 +22,6 @@ public class OrderConsumer {
 	@KafkaListener(topics = "${app.order-topic}")
 	public void consume(String message) {
 		OrderEvent order = objectMapper.readValue(message, OrderEvent.class);
-		if ("DELIVERED".equals(order.status())) {
-			billingService.bill(order);
-		}
+		billingService.bill(order);
 	}
 }

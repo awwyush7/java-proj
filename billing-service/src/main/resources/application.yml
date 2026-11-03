@@ -8,9 +8,10 @@ spring:
       auto-offset-reset: earliest
 
 server:
-  port: 8080
+  port: 8090
 
 app:
-  order-topic: order-events
+  order-topic: orders.delivered
   dynamodb-endpoint: http://localhost:8000
   commission-percent: 20
+  pg-commission-percent: 10
